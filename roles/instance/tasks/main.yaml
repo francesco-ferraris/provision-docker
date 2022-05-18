@@ -1,0 +1,66 @@
+---
+- name: Create {{ instance_name }} boot disk
+  gcp_compute_disk:
+    name: "{{ instance_name }}-boot"
+    size_gb: 50
+    type: pd-standard
+    source_image: projects/centos-cloud/global/images/centos-7-v20220406
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  register: boot_disk
+
+- name: Create {{ instance_name }} docker disk
+  gcp_compute_disk:
+    name: "{{ instance_name }}-docker"
+    size_gb: 60
+    type: pd-standard
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  register: docker_disk
+
+- name: Create public IP address
+  gcp_compute_address:
+     name: "{{ instance_name }}-address"
+     region: "{{ region }}"
+     project: "{{ gcp_project }}"
+     auth_kind: "{{ gcp_cred_kind }}"
+     service_account_file: "{{ gcp_cred_file }}"
+     state: present
+  register: address
+
+- name: Create {{ instance_name }} instance
+  gcp_compute_instance:
+    name: "{{ instance_name }}"
+    machine_type: e2-micro
+    disks:
+    - auto_delete: 'true'
+      boot: 'true'
+      source: "{{ boot_disk }}"
+    - auto_delete: 'true'
+      boot: 'false'
+      source: "{{ docker_disk }}"
+    network_interfaces:
+      - access_configs:
+        - name: External NAT
+          nat_ip: "{{ address }}"
+          type: ONE_TO_ONE_NAT
+    metadata:
+      ssh-keys: "ansible:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0pLhdLYyFMZjTPwgYA4TcH0K4HC4S7KrtNtuh4det58/2wmqItsR7bor6R8AAU/fmS84T9/CqketRI1JdeHtzW5EfMsrV2Pih0h9V+22+pL3voREMkL3yt4M/AN2bJoVxEutVh+3dpVtDMNeqNE2RYt+DKxzxzxVek5l/mxmbCjnYm3cQdJ4RUaWVMaGAh7gI/yUzPLIO7dvZNTvtAf2vZJ3JpQVpPVXpaiwv1ZbVYU6Nu/3gEPdgYLgzLt60NkN4T5Dp9kMt1BFemD6luLYgEN+24Dm1bGBLKb2Ag3dOjvXgTmulRETQggcXKLG8Jnwe5JwCHAtew01dVSM9e9TK9Vuy3eIrZzkldAeLwvvwG+ajYL7WVuf1i+OilOBX60gW58YMW6xyFBdZ/7F/dgfNsNA3YpCs7yyB0c+a5tMobPQXUvcVFjByoqE3Fw6Sqp1kGYhzcYo9Gw7pkvCw9HgiIFFL6dKZXYSwL39PCBMetCYwahwgraSKasYHBEBqLdE= ansible"
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  register: instance
+
+- name: Wait for SSH to come up
+  wait_for: host={{ address.address }} port=22 delay=10 timeout=60
+
+- name: Add host to groupname
+  add_host: hostname={{ address.address }} groupname=centos_instances
