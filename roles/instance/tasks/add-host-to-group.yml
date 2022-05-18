@@ -1,0 +1,8 @@
+- name: "Add host to 'centos_instances' group"
+  add_host:
+    name: "{{ instance.name }}"
+    groups:
+      - centos_instances
+    ansible_user: ansible
+    ansible_pipelining: false
+    ansible_host: "{{ instance.networkInterfaces[0]['networkIP'] }}"
