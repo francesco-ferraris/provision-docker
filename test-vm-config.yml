@@ -1,8 +1,6 @@
-- name: Configure Docker partition
+---
+- name: Configure instances
   hosts: centos_instances
-
-  tasks:
-    - name: Configure instances
-      become: True
-      roles:
-        - vm-config
+  become: True
+  roles:
+    - vm-config
