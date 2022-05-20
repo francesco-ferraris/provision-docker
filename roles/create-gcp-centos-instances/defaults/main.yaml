@@ -6,3 +6,4 @@ inventory_group: "centos_instances"
 boot_disk_size_gb: 50
 data_disk_size_gb: 100
 instance_name: "test"
+zone: "europe-west4-a"
