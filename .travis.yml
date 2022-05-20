@@ -6,4 +6,4 @@ install:
 - pip install -r tests/requirements.txt
 
 script:
-- ansible-lint playbook.yml #-x 303,701,601,206,602,403,301,502,306 -v
+- ansible-lint roles/*/tasks/*.yml -v
