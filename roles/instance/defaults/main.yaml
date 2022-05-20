@@ -1,0 +1,4 @@
+---
+public_ip: false
+disk_type: "pd-standard"
+image: "projects/centos-cloud/global/images/centos-7-v20220406"
