@@ -6,5 +6,5 @@ install:
 - pip install -r tests/requirements.txt
 
 script:
-- ansible-linet --version
+- ansible-lint --version
 - ansible-lint roles/*/tasks/*.yml -v
