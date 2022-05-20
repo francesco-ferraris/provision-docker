@@ -6,3 +6,14 @@
     ansible_user: ansible
     ansible_pipelining: false
     ansible_host: "{{ instance.networkInterfaces[0]['networkIP'] }}"
+  when: not public_ip
+
+- name: "Add host to 'centos_instances' group"
+  add_host:
+    name: "{{ public_instance.name }}"
+    groups:
+      - centos_instances
+    ansible_user: ansible
+    ansible_pipelining: false
+    ansible_host: "{{ public_instance.networkInterfaces[0]['networkIP'] }}"
+  when: public_ip
