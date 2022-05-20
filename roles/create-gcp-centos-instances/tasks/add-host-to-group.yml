@@ -1,4 +1,4 @@
-- name: "Add host to 'centos_instances' group"
+- name: "Add host to {{ inventory_group }} group"
   add_host:
     name: "{{ instance.name }}"
     groups:
