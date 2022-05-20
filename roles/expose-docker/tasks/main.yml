@@ -1,7 +1,7 @@
 ---
 - name: Install openssl
   package: 
-    name: openssl
+  name: "openssl"
     state: present
 
 - name: Generate certificates
