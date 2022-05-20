@@ -1,12 +1,4 @@
 ---
-# - name: Read device information
-#  community.general.parted: device=/dev/sda unit=GiB
-#  register: sda_info
-
-# - name: Read device information
-#  community.general.parted: device=/dev/sdb unit=GiB
-#  register: sdb_info
-
 - name: Install lvm2 dependency
   package:
     name: lvm2
@@ -20,9 +12,9 @@
 
 - name: Create Docker Logical Volume
   lvol:
-    vg: docker-vg
-    lv: docker-lv
-    size: "{{ size }}"
+    vg: "{{ vg_name }}"
+    lv: "{{ lv_name }}"
+    size: "40g"
     force: true
 
 - name: Create directory /var/lib/docker if does not exist
@@ -34,11 +26,11 @@
 - name: Format the xfs filesystem
   filesystem:
     fstype: xfs
-    dev: /dev/docker-vg/docker-lv
+    dev: "/dev/{{ vg_name }}/{{ lv_name }}"
 
 - name: Mount the lv on /var/lib/docker
   mount:
     path: "{{ docker_mountpath }}"
-    src: /dev/docker-vg/docker-lv
+    src: "/dev/{{ vg_name }}/{{ lv_name }}"
     fstype: xfs
     state: mounted
