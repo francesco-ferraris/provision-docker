@@ -9,7 +9,7 @@
     name: alexinthesky.secure-docker-daemon
   vars:
     dds_host: "{{ hostname }}"
-  
+
 - name: Set default TLS authentication
   copy:
     remote_src: true
