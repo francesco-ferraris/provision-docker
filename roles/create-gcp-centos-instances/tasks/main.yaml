@@ -36,7 +36,7 @@
   register: address
 
 - name: Generate SSH keys
-  import_tasks: "test-ssh-keys.yml"
+  import_tasks: "generate-ssh-keys.yml"
 
 - name: Create {{ instance_name }} instance
   gcp_compute_instance:
