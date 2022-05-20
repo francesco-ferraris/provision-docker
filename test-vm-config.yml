@@ -1,4 +1,5 @@
 - name: Configure Docker partition
+  hosts: centos_instances
 
   tasks:
     - name: Configure instances
