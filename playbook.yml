@@ -49,10 +49,9 @@
   #connection: ssh
   become: True
   roles:
-    - role: geerlingguy.docker
+    - role: install-docker
       docker_edition: 'ce'
-      docker_package: "docker-{{ docker_edition }}-20.10.*"
-      docker_install_compose: false
+      docker_version: "20.10.*"
       docker_users:
         - ansible
     - role: expose-docker
