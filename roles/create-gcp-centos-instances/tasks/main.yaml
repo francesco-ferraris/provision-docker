@@ -53,7 +53,7 @@
       - network: 
           selfLink: "global/networks/default"
     metadata:
-      ssh-keys: "{{ ssh_user }}:{{ public_key }}"
+      ssh-keys: "{{ ssh_user }}:{{ key.public_key }}"
     zone: "{{ zone }}"
     project: "{{ gcp_project }}"
     auth_kind: "{{ gcp_cred_kind }}"
@@ -65,7 +65,7 @@
 - name: Create {{ instance_name }} instance with public ip
   gcp_compute_instance:
     name: "{{ instance_name }}"
-    machine_type: n1-standard-1
+    machine_type: "{{ machine_type }}"
     disks:
     - auto_delete: 'true'
       boot: 'true'
@@ -81,7 +81,7 @@
             nat_ip: "{{ address }}"
             type: ONE_TO_ONE_NAT
     metadata:
-      ssh-keys: "{{ ssh_user }}:{{ public_key }}"
+      ssh-keys: "{{ ssh_user }}:{{ key.public_key }}"
     zone: "{{ zone }}"
     project: "{{ gcp_project }}"
     auth_kind: "{{ gcp_cred_kind }}"

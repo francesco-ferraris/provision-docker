@@ -6,3 +6,4 @@
     size: 4096
     state: present
     force: false
+  register: key
