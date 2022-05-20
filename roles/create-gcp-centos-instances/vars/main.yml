@@ -1,0 +1,2 @@
+---
+image: "projects/centos-cloud/global/images/{{ image_version }}"

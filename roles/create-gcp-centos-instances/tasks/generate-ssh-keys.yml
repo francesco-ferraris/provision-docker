@@ -1,0 +1,8 @@
+---
+- name: Generate SSH keys to connect to the machine
+  openssh_keypair:
+    path: "~/.ssh/{{ ssh_key_filename }}"
+    type: rsa
+    size: 4096
+    state: present
+    force: no

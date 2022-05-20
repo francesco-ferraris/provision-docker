@@ -35,10 +35,13 @@
   when: public_ip
   register: address
 
+- name: Generate SSH keys
+  import_tasks: "test-ssh-keys.yml"
+
 - name: Create {{ instance_name }} instance
   gcp_compute_instance:
     name: "{{ instance_name }}"
-    machine_type: n1-standard-1
+    machine_type: "{{ machine_type }}"
     disks:
     - auto_delete: 'true'
       boot: 'true'
@@ -50,7 +53,7 @@
       - network: 
           selfLink: "global/networks/default"
     metadata:
-      ssh-keys: "ansible:{{ public_key }}"
+      ssh-keys: "{{ ssh_user }}:{{ public_key }}"
     zone: "{{ zone }}"
     project: "{{ gcp_project }}"
     auth_kind: "{{ gcp_cred_kind }}"
@@ -78,7 +81,7 @@
             nat_ip: "{{ address }}"
             type: ONE_TO_ONE_NAT
     metadata:
-      ssh-keys: "ansible:{{ public_key }}"
+      ssh-keys: "{{ ssh_user }}:{{ public_key }}"
     zone: "{{ zone }}"
     project: "{{ gcp_project }}"
     auth_kind: "{{ gcp_cred_kind }}"
