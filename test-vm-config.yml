@@ -1,8 +1,7 @@
 - name: Configure Docker partition
 
   tasks:
-
     - name: Configure instances
       become: True
       roles:
-        - role: vm-config
+        - vm-config
