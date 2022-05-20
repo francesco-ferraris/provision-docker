@@ -1,3 +1,3 @@
 ---
-- name: Install Docker
-  include_roles: geerlingguy.docker
+# name: Install Docker
+- include_roles: geerlingguy.docker
