@@ -5,3 +5,4 @@ image: "projects/centos-cloud/global/images/centos-7-v20220406"
 inventory_group: "centos_instances"
 boot_disk_size_gb: 50
 data_disk_size_gb: 100
+instance_name: "test"
