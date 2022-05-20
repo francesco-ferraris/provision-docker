@@ -1,0 +1,5 @@
+---
+docker_package: "docker-{{ docker_edition }}-{{ docker_version }}"
+docker_install_compose: false
+docker_users:
+  - ansible

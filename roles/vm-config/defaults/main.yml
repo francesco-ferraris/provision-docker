@@ -1,0 +1,5 @@
+---
+device: "/dev/sdb"
+size: "40g"
+docker_mountpath: "/var/lib/docker"
+

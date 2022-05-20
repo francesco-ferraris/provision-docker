@@ -1,6 +1,6 @@
 ---
 - name: Install openssl
-  package:
+  package: 
     name: openssl
     state: present
 
@@ -12,7 +12,7 @@
   
 - name: Set default TLS authentication
   copy:
-    remote_src: true
+    remote_src: yes
     src: "/root/.docker/"
     dest: "/home/{{ ansible_user }}/.docker/"
     owner: "{{ ansible_user }}"
@@ -34,7 +34,7 @@
 
 - name: Reload daemon configuration
   systemd:
-    daemon_reload: true
+    daemon_reload: yes
 
 - name: Configure Docker daemon options.
   copy:
@@ -48,7 +48,7 @@
   fetch:
     src: "/root/.docker/{{ item }}"
     dest: "{{ client_cert_dest_folder }}"
-    # flat: yes
+    #flat: yes
   with_items:
     - "ca.pem"
     - "cert.pem"
