@@ -17,4 +17,6 @@
         DOCKER_HOST: "tcp://{{ ansible_host }}:2376"
         DOCKER_TLS_VERIFY: 1
 
-    - debug: output
+    - name: Docker version output
+      debug:
+        msg: "{{ output }}"
