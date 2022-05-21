@@ -7,8 +7,19 @@
 - name:
   hosts: all
   become: true
-
+  vars:
+    client_cert_dest_folder: "/home/{{ lookup( 'env', 'USER') }}/.docker"
+    
   tasks:
+
+    - name: Fetch client certificates
+      fetch:
+        src: "/root/.docker/{{ item }}"
+        dest: "{{ client_cert_dest_folder }}"
+      with_items:
+        - "ca.pem"
+        - "cert.pem"
+        - "key.pem"
 
     - name: Test docker command
       command: docker version
