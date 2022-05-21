@@ -21,6 +21,11 @@
         - "cert.pem"
         - "key.pem"
 
+- name: Print ansible_hostname
+  hosts: all
+  debug:
+    msg: "{{ ansible_hostname }}"
+
 - name:
   hosts: localhost
 #  vars:
