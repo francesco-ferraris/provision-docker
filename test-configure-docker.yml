@@ -21,13 +21,20 @@
         - "cert.pem"
         - "key.pem"
 
+- name:
+  hosts: localhost
+#  vars:
+#    client_key_folder: "/home/{{ lookup( 'env', 'USER') }}/.docker"
+
+  tasks:
+
     - name: Test docker command
       hosts: localhost
       command: docker --tlsverify --tlscacert=/home/g11622966/.docker/centos-1/root/.docker/ca.pem --tlscert=/home/g11622966/.docker/centos-1/root/.docker/cert.pem --tlskey=/home/g11622966/.docker/centos-1/root/.docker/key.pem -H=10.164.0.37:2376 version
       register: output
-      environment:
-        DOCKER_HOST: "tcp://{{ ansible_host }}:2376"
-        DOCKER_TLS_VERIFY: 1
+#      environment:
+#        DOCKER_HOST: "tcp://{{ ansible_host }}:2376"
+#        DOCKER_TLS_VERIFY: 1
 
     - name: Docker version output
       debug:
