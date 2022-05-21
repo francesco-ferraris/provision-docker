@@ -1,0 +1,20 @@
+- name: Configure instances
+  hosts: all
+  become: True
+  roles:
+    - configure-docker
+
+- name:
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Test docker command
+      command: docker version
+      register: output
+      environment:
+        DOCKER_HOST: "tcp://{{ ansible_host }}:2376"
+        DOCKER_TLS_VERIFY: 1
+
+    - debug: output

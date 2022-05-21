@@ -1,0 +1,3 @@
+---
+dependencies:
+  - role: alexinthesky.secure-docker-daemon
