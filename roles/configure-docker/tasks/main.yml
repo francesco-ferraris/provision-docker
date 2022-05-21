@@ -6,7 +6,7 @@
 
 - name: Expose Docker daemon securely
   vars:
-    dds_host: "centos-1"
+    dds_host: "{{ ansible_hostname }}"
   include_role:
     name: alexinthesky.secure-docker-daemon
 
