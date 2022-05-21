@@ -35,7 +35,7 @@
   when: docker_options.keys() | length > 0
   notify: restart docker
 
-- import_tasks: "wait-for-connection.yml"
+- include_tasks: "automatic-startup.yml"
 
 #- name: Set default TLS authentication
 #  copy:
