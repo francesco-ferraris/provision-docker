@@ -1,7 +1,9 @@
 - name: Print ansible_hostname
   hosts: all
-  debug:
-    msg: "{{ ansible_hostname }}"
+  tasks:
+
+    - debug:
+        msg: "{{ ansible_hostname }}"
 
 - name: Configure instances
   hosts: all
