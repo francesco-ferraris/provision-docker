@@ -9,7 +9,6 @@
     instances:
     - centos-1
     - centos-2
-    public_key: "{{ lookup('file', '/home/g11622966/provision-docker/ansible_rsa.pub') }}"
 
   tasks:
 

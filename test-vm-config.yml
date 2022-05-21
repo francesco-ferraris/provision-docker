@@ -1,6 +1,6 @@
 ---
 - name: Configure instances
-  hosts: centos_instances
+  hosts: all
   become: True
   roles:
     - vm-config

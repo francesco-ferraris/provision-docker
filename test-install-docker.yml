@@ -5,7 +5,6 @@
   vars:
     docker_edition: 'ce'
     docker_version: "20.10.*"
-    #docker_install_compose: false
     docker_users:
       - devops
   roles:
