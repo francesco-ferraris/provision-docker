@@ -4,3 +4,6 @@
   become: True
   roles:
     - configure-docker-swarm
+  environment:
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_HOST: "tcp://{{ ansible_hostname }}:2376"
