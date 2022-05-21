@@ -29,7 +29,6 @@
   tasks:
 
     - name: Test docker command
-      hosts: localhost
       command: docker --tlsverify --tlscacert=/home/g11622966/.docker/centos-1/root/.docker/ca.pem --tlscert=/home/g11622966/.docker/centos-1/root/.docker/cert.pem --tlskey=/home/g11622966/.docker/centos-1/root/.docker/key.pem -H=10.164.0.37:2376 version
       register: output
 #      environment:
