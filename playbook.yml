@@ -1,5 +1,6 @@
-- name: Provision Docker
+- name: Provision environment
   hosts: localhost
+  gather_facts: False
   vars:
     gcp_project: tim-inf-col-ap00017859p65-l0
     gcp_cred_kind: serviceaccount
@@ -9,91 +10,70 @@
     instances:
     - centos-1
     - centos-2
-    public_key: "{{ lookup('file', '/home/g11622966/provision-docker/ansible_rsa.pub') }}"
 
   tasks:
 
     - name: Provision CentOS instances
       include_role:
-        name: instance
+        name: create-gcp-centos-instances
       with_items:
-      - "{{ instances }}"
+        - "{{ instances }}"
       loop_control:
         loop_var: instance_name
 
 - name: Configure instances
   hosts: centos_instances
   become: True
-  roles: 
-    - role: vm-config
-    - role: geerlingguy.docker
-      docker_edition: 'ce'
-      docker_package: "docker-{{ docker_edition }}-20.10.*"
-      docker_install_compose: false
-      docker_users:
-        - ansible
-    - role: expose-docker
-      hostname: "{{ ansible_hostname }}"
-      client_cert_dest_folder: "/home/g11622966/.docker/"
-      docker_options:
-        tls: true
-        tlscacert: "/etc/docker/ca.pem"
-        tlscert: "/etc/docker/server-cert.pem"
-        tlskey: "/etc/docker/server-key.pem"
-        hosts:
-          - "tcp://0.0.0.0:2376"
-      dds_restart_docker: yes
-
-- name: Install Docker CE
-  hosts: centos_instances
-  #connection: ssh
-  become: True
   roles:
-    - role: install-docker
-      docker_edition: 'ce'
-      docker_version: "20.10.*"
-      docker_users:
-        - ansible
-    - role: expose-docker
-      hostname: "{{ ansible_hostname }}"
-      client_cert_dest_folder: "/home/g11622966/.docker/"
-      docker_options:
-        tls: true
-        tlscacert: "/etc/docker/ca.pem"
-        tlscert: "/etc/docker/server-cert.pem"
-        tlskey: "/etc/docker/server-key.pem"
-        hosts:
-          - "tcp://0.0.0.0:2376"
-      dds_restart_docker: yes
+    - configure-instances
+    - install-docker
+    - configure-docker
 
-- name: Configure Swarm
+- name:
+  hosts: centos_instances
+  become: true
+  vars:
+    client_cert_dest_folder: "/home/{{ lookup( 'env', 'USER') }}/.docker"
+
+  tasks:
+
+    - name: Fetch client certificates
+      fetch:
+        src: "/root/.docker/{{ item }}"
+        dest: "{{ client_cert_dest_folder }}"
+      with_items:
+        - "ca.pem"
+        - "cert.pem"
+        - "key.pem"
+
+- name: Add to inventory
   hosts: localhost
   tasks:
 
-  - name: Add host to swarm managers
-    add_host:
-      name: centos-1
-      groups:
-        - docker_swarm_manager
-      ansible_user: ansible
-      ansible_pipelining: false
-      ansible_host: "{{ hostvars[groups['centos_instances'][0]].ansible_host }}"
+    - name: Add host to swarm manager group
+      add_host:
+        name: "{{ hostvars[groups['centos_instances'][0]].ansible_hostname }}"
+        groups:
+          - docker-swarm-managers
+        ansible_user: "{{ hostvars[groups['centos_instances'][0]].ansible_user }}"
+        ansible_pipelining: false
+        ansible_host: "{{ hostvars[groups['centos_instances'][0]].ansible_host }}"
 
-  - name: Add host to swarm workers
-    add_host:
-      name: centos-2
-      groups:
-        - docker_swarm_worker
-      ansible_user: ansible
-      ansible_pipelining: false
-      ansible_host: "{{ hostvars[groups['centos_instances'][1]].ansible_host }}"
-
+    - name: Add host to swarm worker group
+      add_host:
+        name: "{{ hostvars[groups['centos_instances'][1]].ansible_hostname }}"
+        groups:
+          - docker-swarm-workers
+        ansible_user: "{{ hostvars[groups['centos_instances'][1]].ansible_user }}"
+        ansible_pipelining: false
+        ansible_host: "{{ hostvars[groups['centos_instances'][1]].ansible_host }}"
 
 - name: Configure Docker Swarm
   hosts: centos_instances
-  become: yes
-  environment:
-    DOCKER_TLS_VERIFY: 1
-    DOCKER_HOST: "tcp://{{ ansible_host }}:2376"
-  roles: 
-    - thomasjpfan.docker-swarm
+  become: True
+  roles:
+    - configure-docker-swarm
+
+
+
+
