@@ -27,7 +27,7 @@
   roles:
     - role: configure-instances
     - role: install-docker
-      docker_daemon_options: []
+      docker_daemon_options: {}
     - configure-docker
 
 - name: Get client certificates
