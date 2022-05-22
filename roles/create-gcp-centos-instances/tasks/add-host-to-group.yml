@@ -17,3 +17,11 @@
     ansible_pipelining: false
     ansible_host: "{{ public_instance.networkInterfaces[0]['networkIP'] }}"
   when: public_ip
+
+- name: Add public IP address to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ instance.name }} {{ instance.networkInterfaces[0]['networkIP'] }}"
+    state: present
+  when: public_ip
+
