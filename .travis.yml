@@ -4,6 +4,7 @@ python:
 
 install:
 - pip install -r tests/requirements.txt
+- ansible-galaxy collection install community.general
 
 script:
 - ansible-lint --version
