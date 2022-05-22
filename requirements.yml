@@ -1,0 +1,8 @@
+---
+collections:
+  - name: community.general
+    version: "4.8.1"
+
+roles:
+  - src: robertdebock.hashicorp
+    version: "3.2.4"
