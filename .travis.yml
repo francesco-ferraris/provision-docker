@@ -7,4 +7,4 @@ install:
 
 script:
 - ansible-lint --version
-- ansible-lint -p roles/* playbook.yml playbook.public.yml
+- ansible-lint -p roles/* playbook.yml playbook-public.yml
