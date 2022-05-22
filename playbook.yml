@@ -25,11 +25,12 @@
   hosts: centos_instances
   become: True
   roles:
-    - configure-instances
-    - install-docker
+    - role: configure-instances
+    - role: install-docker
+      docker_daemon_options: []
     - configure-docker
 
-- name:
+- name: Get client certificates
   hosts: centos_instances
   become: true
   vars:
