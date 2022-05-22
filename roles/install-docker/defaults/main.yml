@@ -1,5 +1,5 @@
 ---
-docker_install_compose: False
+docker_install_compose: false
 docker_edition: "ce"
 docker_version: "20.10.*"
 docker_users:
