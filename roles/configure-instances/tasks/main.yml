@@ -5,7 +5,7 @@
     state: present
 
 - name: Create Docker Volume Group
-  lvg:
+  lvol:
     vg: docker-vg
     pvs: "{{ device }}"
     pesize: 16
