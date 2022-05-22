@@ -1,5 +1,6 @@
+---
 - name: pre-reqs | Ensuring Docker Engine Is Running
   service:
-    name: "docker"
-    state: "started"
+    name: docker
+    state: started
   become: true

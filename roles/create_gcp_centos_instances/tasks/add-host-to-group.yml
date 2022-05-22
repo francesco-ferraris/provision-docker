@@ -1,4 +1,5 @@
-- name: "Add host to {{ inventory_group }} group"
+---
+- name: Add host to {{ inventory_group }} group
   add_host:
     name: "{{ instance.name }}"
     groups:
@@ -8,7 +9,7 @@
     ansible_host: "{{ instance.networkInterfaces[0]['networkIP'] }}"
   when: not public_ip
 
-- name: "Add host to {{ inventory_group }} group"
+- name: Add host to {{ inventory_group }} group
   add_host:
     name: "{{ public_instance.name }}"
     groups:

@@ -1,3 +1,4 @@
+---
 - name: Provision environment
   hosts: localhost
   gather_facts: false
@@ -5,17 +6,16 @@
     gcp_project: tim-inf-col-ap00017859p65-l0
     gcp_cred_kind: serviceaccount
     gcp_cred_file: ~/service-account-key.json
-    zone: "europe-west4-a"
-    region: "europe-west4"
+    zone: europe-west4-a
+    region: europe-west4
     instances:
       - centos-1
       - centos-2
 
   tasks:
-
     - name: Provision CentOS instances
       include_role:
-        name: create-gcp-centos-instances
+        name: create_gcp_centos_instances
       with_items:
         - "{{ instances }}"
       loop_control:
@@ -25,31 +25,29 @@
   hosts: centos_instances
   become: true
   roles:
-    - configure-instances
-    - install-docker
+    - configure_instances
+    - install_docker
     - configure_docker
 
 - name: Get client certificates
   hosts: centos_instances
   become: true
   vars:
-    client_cert_dest_folder: "/home/{{ lookup( 'env', 'USER') }}/.docker"
+    client_cert_dest_folder: /home/{{ lookup( 'env', 'USER') }}/.docker
 
   tasks:
-
     - name: Fetch client certificates
       fetch:
-        src: "/root/.docker/{{ item }}"
+        src: /root/.docker/{{ item }}
         dest: "{{ client_cert_dest_folder }}"
       with_items:
-        - "ca.pem"
-        - "cert.pem"
-        - "key.pem"
+        - ca.pem
+        - cert.pem
+        - key.pem
 
 - name: Add to inventory
   hosts: localhost
   tasks:
-
     - name: Add host to swarm manager group
       add_host:
         name: "{{ hostvars[groups['centos_instances'][0]].ansible_hostname }}"
@@ -72,4 +70,4 @@
   hosts: centos_instances
   become: true
   roles:
-    - configure-docker-swarm
+    - configure_docker_swarm

@@ -1,2 +1,2 @@
 ---
-image: "projects/centos-cloud/global/images/{{ image_version }}"
+image: projects/centos-cloud/global/images/{{ image_version }}
