@@ -1,6 +1,6 @@
 - name: Provision environment
   hosts: localhost
-  gather_facts: False
+  gather_facts: false
   vars:
     gcp_project: tim-inf-col-ap00017859p65-l0
     gcp_cred_kind: serviceaccount
@@ -8,8 +8,8 @@
     zone: "europe-west4-a"
     region: "europe-west4"
     instances:
-    - centos-1
-    - centos-2
+      - centos-1
+      - centos-2
 
   tasks:
 
@@ -23,7 +23,7 @@
 
 - name: Configure instances
   hosts: centos_instances
-  become: True
+  become: true
   roles:
     - configure-instances
     - install-docker
@@ -70,10 +70,6 @@
 
 - name: Configure Docker Swarm
   hosts: centos_instances
-  become: True
+  become: true
   roles:
     - configure-docker-swarm
-
-
-
-

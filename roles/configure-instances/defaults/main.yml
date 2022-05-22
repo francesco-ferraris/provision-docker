@@ -1,4 +1,3 @@
 ---
 device: "/dev/sdb"
 docker_mountpath: "/var/lib/docker"
-

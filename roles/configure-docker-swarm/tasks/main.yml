@@ -21,7 +21,7 @@
         'Swarm: inactive' in docker_info.stdout and
         inventory_hostname == docker_swarm_primary_manager
   environment:
-    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: "tcp://{{ ansible_hostname }}:2376"
 
 - name: cluster | Capturing Docker Swarm Worker join-token
@@ -32,7 +32,7 @@
   when: >
         inventory_hostname == docker_swarm_primary_manager
   environment:
-    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: "tcp://{{ ansible_hostname }}:2376"
 
 - name: cluster | Capturing Docker Swarm Manager join-token
@@ -43,7 +43,7 @@
   when: >
         inventory_hostname == docker_swarm_primary_manager
   environment:
-    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: "tcp://{{ ansible_hostname }}:2376"
 
 - name: cluster | Defining Docker Swarm Manager Address
@@ -88,7 +88,7 @@
         'Swarm: active' not in docker_info.stdout and
         'Swarm: pending' not in docker_info.stdout
   environment:
-    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: "tcp://{{ ansible_hostname }}:2376"
 
 - name: cluster | Joining Docker Swarm Workers To Cluster
@@ -104,5 +104,5 @@
         'Swarm: active' not in docker_info.stdout and
         'Swarm: pending' not in docker_info.stdout
   environment:
-    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: "tcp://{{ ansible_hostname }}:2376"

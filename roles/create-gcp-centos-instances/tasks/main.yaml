@@ -43,14 +43,14 @@
     name: "{{ instance_name }}"
     machine_type: "{{ machine_type }}"
     disks:
-    - auto_delete: 'true'
-      boot: 'true'
-      source: "{{ boot_disk }}"
-    - auto_delete: 'true'
-      boot: 'false'
-      source: "{{ data_disk }}"
+      - auto_delete: 'true'
+        boot: 'true'
+        source: "{{ boot_disk }}"
+      - auto_delete: 'true'
+        boot: 'false'
+        source: "{{ data_disk }}"
     network_interfaces:
-      - network: 
+      - network:
           selfLink: "global/networks/default"
     metadata:
       ssh-keys: "{{ ssh_user }}:{{ key.public_key }}"
@@ -67,14 +67,14 @@
     name: "{{ instance_name }}"
     machine_type: "{{ machine_type }}"
     disks:
-    - auto_delete: 'true'
-      boot: 'true'
-      source: "{{ boot_disk }}"
-    - auto_delete: 'true'
-      boot: 'false'
-      source: "{{ data_disk }}"
+      - auto_delete: 'true'
+        boot: 'true'
+        source: "{{ boot_disk }}"
+      - auto_delete: 'true'
+        boot: 'false'
+        source: "{{ data_disk }}"
     network_interfaces:
-      - network: 
+      - network:
           selfLink: "global/networks/default"
         access_configs:
           - name: External NAT
