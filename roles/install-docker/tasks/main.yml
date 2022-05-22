@@ -1,4 +1,9 @@
 ---
 - name: Install Docker
   include_role:
+    vars:
+      docker_install_compose: "{{ compose }}"
+      docker_edition: "{{ edition }}"
+      docker_version: "{{ version }}"
+      docker_users: "{{ users }}"
     name: geerlingguy.docker

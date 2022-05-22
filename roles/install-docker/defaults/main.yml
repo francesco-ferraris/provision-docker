@@ -1,6 +1,6 @@
 ---
-docker_install_compose: false
-docker_edition: "ce"
-docker_version: "20.10.*"
-docker_users:
+compose: false
+edition: "ce"
+version: "20.10.*"
+users:
   - devops
