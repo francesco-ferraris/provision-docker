@@ -1,5 +1,4 @@
 ---
-compose: false
 edition: "ce"
 version: "20.10.*"
 users:
