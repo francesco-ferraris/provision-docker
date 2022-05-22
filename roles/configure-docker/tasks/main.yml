@@ -36,21 +36,3 @@
   notify: restart docker
 
 - include_tasks: "automatic-startup.yml"
-
-#- name: Set default TLS authentication
-#  copy:
-#    remote_src: true
-#    src: "/root/.docker/"
-#    dest: "/home/{{ ansible_user }}/.docker/"
-#    owner: "{{ ansible_user }}"
-#    group: "{{ ansible_user }}"
-#    mode: '0744'
-
-#- name: Fetch client certificates
-#  fetch:
-#    src: "/root/.docker/{{ item }}"
-#    dest: "{{ client_cert_dest_folder }}"
-#  with_items:
-#    - "ca.pem"
-#    - "cert.pem"
-#    - "key.pem"

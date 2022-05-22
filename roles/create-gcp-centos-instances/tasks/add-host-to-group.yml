@@ -25,4 +25,3 @@
     line: "{{ address.address }} {{ public_instance.name }}"
     state: present
   when: public_ip
-
