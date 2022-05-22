@@ -28,7 +28,7 @@
   roles:
     - configure-instances
     - install-docker
-    - configure-docker
+    - configure_docker
 
 - name: Get client certificates
   hosts: centos_instances
