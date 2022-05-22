@@ -8,7 +8,7 @@
   check_mode: false
   become: true
   environment:
-    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: "tcp://{{ ansible_hostname }}:2376"
 
 - name: cluster | Init Docker Swarm Mode On First Manager
