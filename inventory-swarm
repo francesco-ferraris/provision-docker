@@ -1,0 +1,9 @@
+[all]
+centos-1 ansible_host=34.90.253.218 ansible_user=devops
+centos-2 ansible_host=35.204.178.188 ansible_user=devops
+
+[docker-swarm-managers]
+centos-1 ansible_host=34.90.253.218 ansible_user=devops
+
+[docker-swarm-workers]
+centos-2 ansible_host=35.204.178.188 ansible_user=devops

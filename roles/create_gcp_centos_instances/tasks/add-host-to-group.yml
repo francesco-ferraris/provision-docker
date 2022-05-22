@@ -1,0 +1,28 @@
+---
+- name: Add host to {{ inventory_group }} group
+  add_host:
+    name: "{{ instance.name }}"
+    groups:
+      - centos_instances
+    ansible_user: "{{ ssh_user }}"
+    ansible_pipelining: false
+    ansible_host: "{{ instance.networkInterfaces[0]['networkIP'] }}"
+  when: not public_ip
+
+- name: Add host to {{ inventory_group }} group
+  add_host:
+    name: "{{ public_instance.name }}"
+    groups:
+      - centos_instances
+    ansible_user: "{{ ssh_user }}"
+    ansible_pipelining: false
+    ansible_host: "{{ address.address }}"
+  when: public_ip
+
+- name: Add public IP address to /etc/hosts
+  become: true
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ address.address }} {{ public_instance.name }}"
+    state: present
+  when: public_ip

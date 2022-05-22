@@ -1,0 +1,16 @@
+---
+instance_name: test
+image_version: centos-7-v20220406
+machine_type: n1-standard-1
+boot_disk_size_gb: 50
+data_disk_size_gb: 100
+disk_type: pd-standard
+inventory_group: centos_instances
+public_ip: false
+region: europe-west4
+zone: europe-west4-a
+project: project-id
+auth_kind: serviceaccount
+service_account_file: ~/service-account-key.json
+ssh_key_filename: devops-key
+ssh_user: devops

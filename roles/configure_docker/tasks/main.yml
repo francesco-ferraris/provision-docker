@@ -1,0 +1,38 @@
+---
+- name: Install openssl
+  package:
+    name: openssl
+    state: present
+
+- name: Expose Docker daemon securely
+  vars:
+    dds_host: "{{ ansible_hostname }}"
+  include_role:
+    name: alexinthesky.secure-docker-daemon
+
+- name: Configure docker service
+  copy:
+    src: docker.service
+    dest: /lib/systemd/system/docker.service
+    mode: "0644"
+
+- name: Reload daemon configuration
+  systemd:
+    daemon_reload: true
+
+- name: Ensure /etc/docker/ directory exists
+  file:
+    path: /etc/docker
+    state: directory
+    mode: "0755"
+  when: docker_options.keys() | length > 0
+
+- name: Configure Docker daemon options.
+  copy:
+    content: "{{ docker_options | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+    mode: "0644"
+  when: docker_options.keys() | length > 0
+  notify: restart docker
+
+- include_tasks: automatic-startup.yml

@@ -1,0 +1,8 @@
+---
+docker_options:
+  tls: true
+  tlscacert: /etc/docker/ca.pem
+  tlscert: /etc/docker/server-cert.pem
+  tlskey: /etc/docker/server-key.pem
+  hosts:
+    - tcp://0.0.0.0:2376

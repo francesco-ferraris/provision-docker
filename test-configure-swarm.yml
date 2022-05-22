@@ -1,0 +1,6 @@
+---
+- name: Configure Swarm
+  hosts: all
+  become: True
+  roles:
+    - configure-docker-swarm

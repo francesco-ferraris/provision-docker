@@ -3,14 +3,15 @@
   hosts: localhost
   gather_facts: false
   vars:
-    gcp_project: tim-inf-col-ap00017859p65-l0
+    gcp_project: smarket-237213
     gcp_cred_kind: serviceaccount
-    gcp_cred_file: ~/service-account-key.json
+    gcp_cred_file: /mnt/d/Offerte di lavoro/Kiratech/service-account-key.json
     zone: europe-west4-a
     region: europe-west4
     instances:
       - centos-1
       - centos-2
+    public_ip: true
 
   tasks:
     - name: Provision CentOS instances

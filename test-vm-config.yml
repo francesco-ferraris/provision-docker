@@ -1,0 +1,6 @@
+---
+- name: Configure instances
+  hosts: all
+  become: True
+  roles:
+    - vm-config

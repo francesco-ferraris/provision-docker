@@ -1,0 +1,97 @@
+---
+- name: Create {{ instance_name }} boot disk
+  gcp_compute_disk:
+    name: "{{ instance_name }}-boot"
+    size_gb: "{{ boot_disk_size_gb }}"
+    type: "{{ disk_type }}"
+    source_image: "{{ image }}"
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  register: boot_disk
+
+- name: Create {{ instance_name }} docker disk
+  gcp_compute_disk:
+    name: "{{ instance_name }}-docker"
+    size_gb: "{{ data_disk_size_gb }}"
+    type: "{{ disk_type }}"
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  register: data_disk
+
+- name: Create public IP address
+  gcp_compute_address:
+    name: "{{ instance_name }}-address"
+    region: "{{ region }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  when: public_ip
+  register: address
+
+- name: Generate SSH keys
+  import_tasks: generate-ssh-keys.yml
+
+- name: Create {{ instance_name }} instance
+  gcp_compute_instance:
+    name: "{{ instance_name }}"
+    machine_type: "{{ machine_type }}"
+    disks:
+      - auto_delete: "true"
+        boot: "true"
+        source: "{{ boot_disk }}"
+      - auto_delete: "true"
+        boot: "false"
+        source: "{{ data_disk }}"
+    network_interfaces:
+      - network:
+          selfLink: global/networks/default
+    metadata:
+      ssh-keys: "{{ ssh_user }}:{{ key.public_key }}"
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  when: not public_ip
+  register: instance
+
+- name: Create {{ instance_name }} instance with public ip
+  gcp_compute_instance:
+    name: "{{ instance_name }}"
+    machine_type: "{{ machine_type }}"
+    disks:
+      - auto_delete: "true"
+        boot: "true"
+        source: "{{ boot_disk }}"
+      - auto_delete: "true"
+        boot: "false"
+        source: "{{ data_disk }}"
+    network_interfaces:
+      - network:
+          selfLink: global/networks/default
+        access_configs:
+          - name: External NAT
+            nat_ip: "{{ address }}"
+            type: ONE_TO_ONE_NAT
+    metadata:
+      ssh-keys: "{{ ssh_user }}:{{ key.public_key }}"
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    state: present
+  when: public_ip
+  register: public_instance
+
+- name: Wait for SSH connection to come up
+  import_tasks: wait-for-connection.yml
+
+- name: Add host to centos_instances group
+  import_tasks: add-host-to-group.yml

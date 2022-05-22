@@ -1,3 +1,4 @@
+---
 - name: Allow SSH connection
   gcp_compute_firewall:
     name: allow-ssh

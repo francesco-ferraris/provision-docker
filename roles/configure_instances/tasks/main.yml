@@ -1,0 +1,36 @@
+---
+- name: Install lvm2 dependency
+  package:
+    name: lvm2
+    state: present
+
+- name: Create Docker Volume Group
+  lvg:
+    vg: docker-vg
+    pvs: "{{ device }}"
+    pesize: 16
+
+- name: Create Docker Logical Volume
+  lvol:
+    vg: "{{ vg_name }}"
+    lv: "{{ lv_name }}"
+    size: 40g
+    force: true
+
+- name: Create directory /var/lib/docker if does not exist
+  file:
+    path: "{{ docker_mountpath }}"
+    state: directory
+    mode: "0755"
+
+- name: Format the xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/{{ vg_name }}/{{ lv_name }}
+
+- name: Mount the lv on /var/lib/docker
+  mount:
+    path: "{{ docker_mountpath }}"
+    src: /dev/{{ vg_name }}/{{ lv_name }}
+    fstype: xfs
+    state: mounted
