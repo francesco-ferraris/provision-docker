@@ -1,0 +1,24 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: gce
+  project_id: smarket-237213
+  region: europe-west4
+  username: devops
+  auth_kind: serviceaccount
+  service_account_file: ${SA}
+  scopes:
+    - "https://www.googleapis.com/auth/compute"
+  external_access: true
+  instance_os_type: linux
+platforms:
+  - name: centos-7-molecule
+    zone: europe-west4-a
+    machine_type: n1-standard-1
+    preemptible: false
+    image: 'projects/centos-cloud/global/images/centos-7-v20220519'
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
