@@ -1,9 +1,0 @@
----
-- name: Verify
-  hosts: all
-  gather_facts: false
-  tasks:
-
-  - name: Verify that the Logical Volume is at least 40GB
-    assert:
-      that: true
