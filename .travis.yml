@@ -12,6 +12,7 @@ install:
 - pip install -r tests/requirements.txt
 - ansible-galaxy collection install google.cloud
 - ansible-galaxy collection install community.crypto
+- ansible-galaxy collection install community.general
 script:
 - ls
 - pwd
