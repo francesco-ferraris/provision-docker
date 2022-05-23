@@ -11,13 +11,12 @@ before_install:
 #- export service-account-file-path=${pwd}/service-account-key.json
 install:
 - pip install -r tests/requirements.txt
-- ansible-galaxy collection install google.cloud
 - ansible-galaxy collection install -r requirements.yml
 script:
 - pwd
 - ansible-lint --version
 - ansible-lint -p roles/* playbook.yml playbook-public.yml
-- cd roles/configure_instances
+- cd roles/install_docker
 - molecule test
 env:
   global:
