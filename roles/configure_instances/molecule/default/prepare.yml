@@ -26,4 +26,5 @@
 
     - name: Attach disk
       command: "gcloud compute instances attach-disk {{ instance_name }} --disk {{ data_disk.name }} --zone {{ zone }}"
+      changed_when: output.rc == 0
       register: output

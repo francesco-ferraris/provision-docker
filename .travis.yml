@@ -15,7 +15,6 @@ install:
 - ansible-galaxy collection install community.general
 - ansible-galaxy collection install ansible.posix
 script:
-- ls
 - pwd
 - ansible-lint --version
 - ansible-lint -p roles/* playbook.yml playbook-public.yml
