@@ -8,3 +8,7 @@ collections:
     version: "1.0.2"
   - name: community.crypto
     version: "2.3.1"
+
+roles:
+  - name: geerlingguy.docker
+    version: "2.4"
