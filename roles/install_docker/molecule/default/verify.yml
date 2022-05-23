@@ -1,10 +1,18 @@
 ---
 # This is an example playbook to execute Ansible tests.
 
-- name: Verify
+- name: Verify Docker version is 20.16
   hosts: all
+  become: true
   gather_facts: false
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+
+    - name: Get docker version
+      command: "docker -v | cut -d ' ' -f 3 | cut -d ',' -f 1"
+      register: version
+
+    - debug: var=version.stdout
+
+    - name: Assert docker version is 20.16
+      assert:
+        that: version.stdout == 20.16.*
