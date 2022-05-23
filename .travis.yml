@@ -12,9 +12,7 @@ before_install:
 install:
 - pip install -r tests/requirements.txt
 - ansible-galaxy collection install google.cloud
-- ansible-galaxy collection install community.crypto
-- ansible-galaxy collection install community.general
-- ansible-galaxy collection install ansible.posix
+- ansible-galaxy collection install -r requirements.yml
 script:
 - pwd
 - ansible-lint --version
