@@ -13,6 +13,7 @@ install:
 - ansible-galaxy collection install google.cloud
 script:
 - ls
+- pwd
 - ansible-lint --version
 - ansible-lint -p roles/* playbook.yml playbook-public.yml
 - cd roles/configure_instances
