@@ -23,5 +23,6 @@ script:
 - molecule test
 env:
   global:
+  - SA="${TRAVIS_BUILD_DIR}/service-account-key.json"
   - GCP_PROJECT_ID=smarket-237213
   - CLOUDSDK_CORE_DISABLE_PROMPTS=1

@@ -7,7 +7,7 @@ driver:
   region: europe-west4
   username: devops
   auth_kind: serviceaccount
-  service_account_file: ${MOLECULE_PROJECT_DIRECTORY} #~/build/francesco-ferraris/provision-docker/service-account-key.json {{ lookup('env', 'service_account_path') }}
+  service_account_file: ${SA} #~/build/francesco-ferraris/provision-docker/service-account-key.json {{ lookup('env', 'service_account_path') }}
   scopes:
     - "https://www.googleapis.com/auth/compute"
   external_access: true
@@ -21,6 +21,6 @@ platforms:
 provisioner:
   name: ansible
   env:
-    service_account: ${MOLECULE_PROJECT_DIRECTORY}
+    service_account: "'{{ service_account_file }}'"
 verifier:
   name: ansible
