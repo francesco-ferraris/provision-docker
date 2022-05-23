@@ -16,7 +16,7 @@ script:
 - pwd
 - ansible-lint --version
 - ansible-lint -p roles/* playbook.yml playbook-public.yml
-  cd roles/configure_instances
+- cd roles/configure_instances
 - molecule test
 env:
   global:
