@@ -1,3 +1,0 @@
-[centos_instances]
-centos-1 ansible_host=10.164.0.29 ansible_user=devops
-centos-2 ansible_host=10.164.0.99 ansible_user=devops
