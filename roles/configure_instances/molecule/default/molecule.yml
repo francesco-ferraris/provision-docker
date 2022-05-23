@@ -7,7 +7,7 @@ driver:
   region: europe-west4
   username: devops
   auth_kind: serviceaccount
-  service_account_file: ~/provision-docker/service-account-key.json
+  service_account_file: ../../../service-account-key.json
   scopes:
     - "https://www.googleapis.com/auth/compute"
   external_access: true

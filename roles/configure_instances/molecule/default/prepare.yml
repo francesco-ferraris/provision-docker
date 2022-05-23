@@ -9,7 +9,7 @@
     zone: europe-west4-a
     project: smarket-237213
     auth_kind: serviceaccount
-    service_account_file: ~/provision-docker/service-account-key.json
+    service_account_file: ../../../service-account-key.json
   tasks:
 
     - name: Create data disk

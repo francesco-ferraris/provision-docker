@@ -16,8 +16,8 @@ script:
 - pwd
 - ansible-lint --version
 - ansible-lint -p roles/* playbook.yml playbook-public.yml
-# - cd roles/configure_instances
-- roles/configure_instances/molecule test
+  cd roles/configure_instances
+- molecule test
 env:
   global:
   - GCP_PROJECT_ID=smarket-237213
