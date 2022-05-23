@@ -20,7 +20,5 @@ platforms:
     image: 'projects/centos-cloud/global/images/centos-7-v20220519'
 provisioner:
   name: ansible
-  env:
-    service_account: "'{{ service_account_file }}'"
 verifier:
   name: ansible
