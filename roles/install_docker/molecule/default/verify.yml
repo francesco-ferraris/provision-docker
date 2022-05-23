@@ -6,13 +6,13 @@
   tasks:
 
     - name: Get docker version string
-      shell: "docker -v"
+      command: docker -v
       register: version
 
     - name: Extract docker version
       set_fact:
-        docker_version: "{{ version.stdout.split()[2] }}"
+        docker_version: "{{ version.stdout.split()[2] | split(',') }}"
 
     - name: Assert docker version is at least 20.10
       assert:
-        that: docker_version is version('20.10', '>=')
+        that: docker_version[0] is version('20.10', '>=')
