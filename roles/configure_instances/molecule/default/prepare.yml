@@ -1,0 +1,29 @@
+---
+- name: Prepare
+  hosts: localhost
+  vars:
+    disk_name: data-disk
+    instance_name: centos-7-molecule
+    data_disk_size_gb: 100
+    disk_type: pd-standard
+    zone: europe-west4-a
+    project: smarket-237213
+    auth_kind: serviceaccount
+    service_account_file: service-account-key.json
+  tasks:
+
+    - name: Create data disk
+      gcp_compute_disk:
+        name: "{{ disk_name }}"
+        size_gb: "{{ data_disk_size_gb }}"
+        type: "{{ disk_type }}"
+        zone: "{{ zone }}"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: present
+      register: data_disk
+
+    - name: Attach disk
+      command: "gcloud compute instances attach-disk {{ instance_name }} --disk {{ data_disk.name }} --zone {{ zone }}"
+      register: output
