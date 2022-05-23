@@ -11,6 +11,7 @@ before_install:
 install:
 - pip install -r tests/requirements.txt
 - ansible-galaxy collection install google.cloud
+- ansible-galaxy collection install community.crypto
 script:
 - ls
 - pwd
