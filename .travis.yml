@@ -8,6 +8,7 @@ before_install:
 - source "$HOME/google-cloud-sdk/path.bash.inc"
 - gcloud auth activate-service-account --key-file=service-account-key.json
 - gcloud config set project "${GCP_PROJECT_ID}"
+- export service-account-file-path=${pwd}/service-account-key.json
 install:
 - pip install -r tests/requirements.txt
 - ansible-galaxy collection install google.cloud
