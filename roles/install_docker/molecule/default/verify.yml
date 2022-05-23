@@ -1,6 +1,4 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify Docker version is 20.16
   hosts: all
   become: true
@@ -15,6 +13,6 @@
       set_fact:
         docker_version: "{{ version.stdout.split()[2] }}"
 
-    - name: Assert docker version is at least 20.16
+    - name: Assert docker version is at least 20.10
       assert:
-        that: docker_version is version('20.16', '>=')
+        that: docker_version is version('20.10', '>=')
