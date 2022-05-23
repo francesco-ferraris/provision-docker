@@ -12,3 +12,5 @@ collections:
 roles:
   - name: geerlingguy.docker
     version: "4.2.2"
+  - name: alexinthesky.secure-docker-daemon
+    version: "0.3"
