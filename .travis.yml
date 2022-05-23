@@ -10,8 +10,9 @@ before_install:
 - gcloud config set project "${GCP_PROJECT_ID}"
 install:
 - pip install -r tests/requirements.txt
-script:
 - ansible-galaxy collection install google.cloud
+script:
+- ls
 - ansible-lint --version
 - ansible-lint -p roles/* playbook.yml playbook-public.yml
 - cd roles/configure_instances
