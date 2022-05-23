@@ -7,12 +7,14 @@
   gather_facts: false
   tasks:
 
-    - name: Get docker version
-      command: "docker -v | cut -d ' ' -f 3 | cut -d ',' -f 1"
+    - name: Get docker version string
+      shell: "docker -v"
       register: version
 
-    - debug: var=version.stdout
+    - name: Extract docker version
+      set_fact:
+        docker_version: "{{ version.stdout.split()[2] }}"
 
-    - name: Assert docker version is 20.16
+    - name: Assert docker version is at least 20.16
       assert:
-        that: version.stdout == 20.16.*
+        that: docker_version is version('20.16', '>=')
