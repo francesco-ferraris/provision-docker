@@ -91,3 +91,18 @@
   become: true
   roles:
     - configure_docker_swarm
+
+- name: Test Docker Swarm
+  hosts: localhost
+
+  tasks:
+
+    - name: Test Docker Swarm service
+      command: docker service create nginx
+      register: output
+      failed_when: output.rc != 0
+      changed_when: false
+      environment:
+        DOCKER_TLS_VERIFY: 1
+        DOCKER_HOST: "tcp://{{ hostvars[groups['docker-swarm-managers'][0]].ansible_hostname }}:2376"
+        DOCKER_CERT_PATH: "{{ lookup('env', 'HOME') }}/.docker/{{ hostvars[groups['docker-swarm-managers'][0]].ansible_hostname }}/root/.docker"
