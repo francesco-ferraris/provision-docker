@@ -101,7 +101,7 @@
       command: docker --version
       changed_when: false
       register: docker_valid
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Test Docker Swarm service
       command: docker service create nginx
