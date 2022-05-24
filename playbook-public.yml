@@ -24,7 +24,7 @@
 
     - name: Ingress firewall rules
       gcp_compute_firewall:
-        name: allow-ssh
+        name: allow-rules
         allowed:
           - ip_protocol: tcp
             ports:
