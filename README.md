@@ -81,7 +81,7 @@ Variabili configurabili:
 
       edition: ce # Edizione di Docker
       version: 20.10.* # Versione di Docker
-      users: # Utenze abilitata a usare Docker
+      users: # Utenze abilitate a usare Docker
         - devops
 
 ### configure_docker
