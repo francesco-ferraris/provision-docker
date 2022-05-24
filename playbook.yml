@@ -107,7 +107,7 @@
       register: output
       failed_when: output.rc != 0
       changed_when: false
-      when: !docker_valid.failed
+      when: docker_valid.failed == false
       environment:
         DOCKER_TLS_VERIFY: "1"
         DOCKER_HOST: "tcp://{{ hostvars[groups['docker-swarm-managers'][0]].ansible_hostname }}:2376"
