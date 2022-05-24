@@ -99,6 +99,7 @@
 
     - name: Check If Docker Is Installed
       command: docker --version
+      changed_when: false
       register: docker_valid
       ignore_errors: yes
 
@@ -107,7 +108,7 @@
       register: output
       failed_when: output.rc != 0
       changed_when: false
-      when: docker_valid.failed == false
+      when: not docker_valid.failed
       environment:
         DOCKER_TLS_VERIFY: "1"
         DOCKER_HOST: "tcp://{{ hostvars[groups['docker-swarm-managers'][0]].ansible_hostname }}:2376"
