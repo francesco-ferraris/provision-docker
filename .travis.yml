@@ -13,7 +13,7 @@ jobs:
       install:
         - pip install -r tests/requirements-lint.txt
       script:
-        - ansible-lint -p roles/* playbook.yml playbook-public.yml
+        - ansible-lint -p roles/* playbook.yml
 
     - stage: test
       name: "Test install_docker role"
