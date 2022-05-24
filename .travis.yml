@@ -6,11 +6,6 @@ stages:
   - lint
   - test
 
-branches:
-  only:
-  - gh-pages
-  - /.*/
-
 jobs:
   include:
     - stage: lint
