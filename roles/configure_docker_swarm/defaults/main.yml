@@ -1,13 +1,7 @@
 ---
 docker_swarm_addr: "{{ hostvars[inventory_hostname]['ansible_' + docker_swarm_interface]['ipv4']['address'] }}"
-docker_swarm_cert_expiry: 2160h0m0s
-docker_swarm_dispatcher_heartbeat_duration: 5s
 docker_swarm_interface: eth0
-docker_swarm_config_networks: false
-docker_swarm_config_settings: false
 docker_swarm_managers_ansible_group: docker-swarm-managers
-docker_swarm_networks: []
 docker_swarm_port: "2377"
 docker_swarm_primary_manager: "{{ groups[docker_swarm_managers_ansible_group][0] }}"
-docker_swarm_task_history_limit: "5"
 docker_swarm_workers_ansible_group: docker-swarm-workers
