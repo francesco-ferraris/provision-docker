@@ -43,7 +43,7 @@ Il punto 6 è implementato con Molecule all'interno del ruolo _install_docker_.
 ### create_gcp_centos_instances
 
 Il ruolo utilizza i moduli ansible specifici per la piattaforma GCP per creare le macchine
-virtuali con l'opzione di crearle con un IP pubblico. Le macchine vengono successivamente aggiunte
+virtuali su network di default con l'opzione per utilizzare un IP pubblico. Le macchine vengono successivamente aggiunte
 ad un inventario runtime.
 Le macchine virtuali sono configurate con due dischi e l'autenticazione alla piattaforma avviene con
 in service account.
@@ -131,11 +131,14 @@ un service account cifrato, che viene decriptato in fase di esecuzione della pip
 connettersi con l'ambiente di test.
 
 ## Esecuzione
+Realizzato con Ansible core 2.12.6
+
+Senza un service account valido con le permission necessarie non è possibile eseguire il playbook (per semplicità ne ho usato uno con permessi di Editor).
+
 Prima di eseguire il playbook è necessario configurare un ambiente virtuale
 python e installare le dipendenze con questi comandi:
 
-    ansible-galaxy collection install -r requirements.yml
-    ansible-galaxy role install -r requirements.yml
+    ansible-galaxy install -r requirements.yml
 
 Installare le dipendenze python:
 
