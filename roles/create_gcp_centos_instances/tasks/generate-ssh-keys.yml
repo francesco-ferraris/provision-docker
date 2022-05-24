@@ -1,4 +1,10 @@
 ---
+- name: Create a directory if it does not exist
+  file:
+    path: ~/.ssh
+    state: directory
+    mode: '0755'
+
 - name: Generate SSH keys to connect to the machine
   openssh_keypair:
     path: ~/.ssh/{{ ssh_key_filename }}

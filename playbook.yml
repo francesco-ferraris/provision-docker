@@ -33,7 +33,7 @@
   hosts: centos_instances
   become: true
   vars:
-    client_cert_dest_folder: /home/{{ lookup( 'env', 'USER') }}/.docker
+    client_cert_dest_folder: ~/.docker
 
   tasks:
     - name: Fetch client certificates

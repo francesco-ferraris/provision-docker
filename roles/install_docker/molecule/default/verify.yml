@@ -1,0 +1,19 @@
+---
+- name: Verify Docker version is 20.16
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Get docker version string
+      command: docker -v
+      register: version
+      changed_when: false
+
+    - name: Extract docker version
+      set_fact:
+        docker_version: "{{ version.stdout.split()[2] | split(',') }}"
+
+    - name: Assert docker version is at least 20.10
+      assert:
+        that: docker_version[0] is version('20.10', '>=')
