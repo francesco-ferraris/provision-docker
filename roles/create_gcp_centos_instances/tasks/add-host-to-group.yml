@@ -19,10 +19,9 @@
     ansible_host: "{{ address.address }}"
   when: public_ip
 
-- name: Add public IP address to /etc/hosts
+- name: Replace a localhost entry searching for a literal string to avoid escaping
   become: true
   lineinfile:
     path: /etc/hosts
+    search_string: "{{ public_instance.name }}"
     line: "{{ address.address }} {{ public_instance.name }}"
-    state: present
-  when: public_ip

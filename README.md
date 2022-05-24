@@ -1,2 +1,106 @@
 [![CI](https://app.travis-ci.com/francesco-ferraris/provision-docker.svg?branch=travis-ci-dev)](https://app.travis-ci.com/francesco-ferraris/provision-docker)
 # provision-docker
+
+## Obiettivo
+
+Questo playbook implementa l'esecuzione delel seguenti attività su Google Cloud Platform:
+1. Provisioning di due VM CentOS. Le VM possono essere locali oppure su un
+Cloud provider a scelta.
+2. Configurare le VM:
+   1. Assicurarsi che la partizione utilizzata da Docker abbia almeno 40GB di
+   spazio disponibile, effettuando un opportuno resize.
+3. Setup di Docker sulle VM
+4. Configurare Docker:
+   1. Esporre le API REST del Docker Daemon in modo sicuro
+   2. Assicurarsi che il Docker Daemon sia configurato come un servizio che
+   parta automaticamente all'avvio del sistema
+5. Configurare un Docker Swarm sulle VM, che sia accessibile in modo sicuro.
+Assicurarsi di riuscire ad interagire e deployare servizi sullo Swarm dalla
+macchina locale.
+6. Testare un task a scelta dei precedenti utilizzando Molecule
+   1. Il task scelto è il numero 3.
+
+Per la parte di Continuous Integration sono stati realizzate le seguenti attività con Travis CI:
+1. Configurare una pipeline di Continuous Integration su un tool a scelta
+2. La pipeline deve: 
+   1. Eseguire il linting del codice e fallire in caso di errori, che vanno
+   opportunamente corretti
+3. Eseguire il test realizzato al punto 6 in automatico ad ogni push di codice
+sul repository
+
+## Struttura
+
+Ogni attività è stata realizzata definendo uno specifico ruolo che implementa la feature richiesta.
+All'interno della cartella _roles_ sono disponibili i ruoli che implementano le rispettive attività:
+1. create_gcp_centos_instances
+2. configure_instances
+3. install_docker
+4. configure_docker
+5. configure_docker_swarm
+
+Il punto 6 è implementato con Molecule all'interno del ruolo _install_docker_.
+
+### create_gcp_centos_instances
+
+Il ruolo utilizza i moduli ansible specifici per la piattaforma GCP per creare le macchine
+virtuali con l'opzione di crearle con un IP pubblico. Le macchine vengono successivamente aggiunte
+ad un inventario runtime.
+Le macchine virtuali  sono configurate con due dischi e l'autenticazione alla piattaforma avviene con
+in service account.
+
+### configure_instances
+Il ruolo configura le istanze create allocando una partizione LVM da 40 GB a docker
+
+### install_docker
+Il ruolo Esegue l'installazione di docker CE sulle istanze facendo uso del ruolo _geerlingguy.docker_
+disponibile su ansible-galaxy.
+Non sono state apportate personalizzazione particolari al ruolo dal momento che effettua un'installazione
+corretta del software e l'attività non prevede requisiti particolari.
+
+### configure_docker
+Il ruolo effettua la configurazione di docker sulle istanze riutilizzando e adattando il ruolo
+_alexinthesky.secure-docker-daemon_. Le personalizzazioni effettuate si assicurano che la libreria 
+_openssl_ sia installata sulle istanze (necessaria per la generazione dei certificati), configurano
+il service docker per l'avvio automatico ad ogni startup dell'istanza e configurano il docker affinchè
+sia esposto in maniera sicura con i certificati generati.
+
+### configure_docker_swarm
+Il ruolo crea uno Swarm sulle due istanze: un manger e un worker.
+Il task è stato implementato riadattando il ruolo _mrlesmithjr.ansible-docker-swarm_
+inserendo le personalizzazioni per poter interagire con il docker esposto in modo sicuro sulle istanze
+Il docker swarm viene configurato partendo da due gruppi all'interno dell'inventario runtime: un gruppo per
+i manager e uno per i worker e i relativi task vengono eseguiti differenziando tra queste due
+tipologie di istanze.
+
+## Testing
+E' stato realizzato un test con Molecule per il ruolo _install_docker_ che verifica la versione installata
+di Docker. Lo scenario realizzato fa uso della libreria python _molecule_gce_ che permette 
+la creazione di un ambiente  su GCP su cui è eseguire i test.
+
+## Continuous Integration
+E' stata realizzata una pipeline con Travis CI che esegue il linting dei file yml con _ansible-lint_.
+Ad ogni push la pipeline viene eseguita e fallisce in caso di errori su almeno un file.
+Il linting è effettuato sia sui playbook che sui ruoli.
+L'unico errore che viene ignorato è quello relativo ai FQCN.
+
+Il test indicato al punto 6 viene eseguito ad ogni push del codice dalla pipeline e utilizza
+un service account cifrato, che viene decriptato in fase di esecuzione della pipeline, per
+connettersi con l'ambiente di test.
+
+## Esecuzione
+Prima di eseguire il playbook è necessario configurare un ambiente virtuale
+python e installare le dipendenze con questi comandi:
+
+    ansible-galaxy collection install -r requirements.yml
+    ansible-galaxy role install -r requirements.yml
+
+Installare le dipendenze python:
+
+    pip install -r requirements.txt
+
+Eseguire il playbook:
+
+    ansible-playbook playbook.yml -K --private-key <PERCORSO_PRIVATE_KEY>
+
+Il percorso da inserire è quello dove verrà creata la chiave privata per connettersi alle istanze
+create dal primo task (di default ~/.ssh/devops-key).

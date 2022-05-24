@@ -22,6 +22,25 @@
       loop_control:
         loop_var: instance_name
 
+    - name: Ingress firewall rules
+      gcp_compute_firewall:
+        name: allow-rules
+        allowed:
+          - ip_protocol: tcp
+            ports:
+              - "22"
+              - "2377"
+              - "7946"
+          - ip_protocol: udp
+            ports:
+              - "7946"
+              - "4789"
+        project: "{{ gcp_project }}"
+        auth_kind: "{{ gcp_cred_kind }}"
+        service_account_file: "{{ gcp_cred_file }}"
+        state: present
+
+
 - name: Configure instances
   hosts: centos_instances
   become: true
@@ -72,3 +91,18 @@
   become: true
   roles:
     - configure_docker_swarm
+
+- name: Test Docker Swarm
+  hosts: localhost
+
+  tasks:
+
+    - name: Test Docker Swarm service
+      command: docker service create nginx
+      register: output
+      failed_when: output.rc != 0
+      changed_when: false
+      environment:
+        DOCKER_TLS_VERIFY: "1"
+        DOCKER_HOST: "tcp://{{ hostvars[groups['docker-swarm-managers'][0]].ansible_hostname }}:2376"
+        DOCKER_CERT_PATH: "{{ lookup('env', 'HOME') }}/.docker/{{ hostvars[groups['docker-swarm-managers'][0]].ansible_hostname }}/root/.docker"

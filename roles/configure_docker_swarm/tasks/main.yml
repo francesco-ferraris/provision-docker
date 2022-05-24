@@ -1,7 +1,7 @@
 ---
 - include: pre-reqs.yml
 
-- name: cluster | Checking Swarm Mode Status
+- name: Checking Swarm Mode Status
   command: docker info
   register: docker_info
   changed_when: false
@@ -11,7 +11,7 @@
     DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: tcp://{{ ansible_hostname }}:2376
 
-- name: cluster | Init Docker Swarm Mode On First Manager
+- name: Init Docker Swarm Mode On First Manager
   command: >
     docker swarm init
     --listen-addr {{ docker_swarm_addr }}:{{ docker_swarm_port }}
@@ -24,7 +24,7 @@
     DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: tcp://{{ ansible_hostname }}:2376
 
-- name: cluster | Capturing Docker Swarm Worker join-token
+- name: Capturing Docker Swarm Worker join-token
   command: docker swarm join-token -q worker
   changed_when: false
   register: docker_swarm_worker_token
@@ -35,7 +35,7 @@
     DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: tcp://{{ ansible_hostname }}:2376
 
-- name: cluster | Capturing Docker Swarm Manager join-token
+- name: Capturing Docker Swarm Manager join-token
   command: docker swarm join-token -q manager
   changed_when: false
   register: docker_swarm_manager_token
@@ -46,35 +46,35 @@
     DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: tcp://{{ ansible_hostname }}:2376
 
-- name: cluster | Defining Docker Swarm Manager Address
+- name: Defining Docker Swarm Manager Address
   set_fact:
     docker_swarm_manager_address: "{{ docker_swarm_addr }}:{{ docker_swarm_port }}"
   changed_when: false
   when: >
     inventory_hostname == docker_swarm_primary_manager
 
-- name: cluster | Defining Docker Swarm Manager Address
+- name: Defining Docker Swarm Manager Address
   set_fact:
     docker_swarm_manager_address: "{{ hostvars[docker_swarm_primary_manager]['docker_swarm_manager_address'] }}"
   changed_when: false
   when: >
     inventory_hostname != docker_swarm_primary_manager
 
-- name: cluster | Defining Docker Swarm Manager join-token
+- name: Defining Docker Swarm Manager join-token
   set_fact:
     docker_swarm_manager_token: "{{ hostvars[docker_swarm_primary_manager]['docker_swarm_manager_token'] }}"
   changed_when: false
   when: >
     inventory_hostname != docker_swarm_primary_manager
 
-- name: cluster | Defining Docker Swarm Worker join-token
+- name: Defining Docker Swarm Worker join-token
   set_fact:
     docker_swarm_worker_token: "{{ hostvars[docker_swarm_primary_manager]['docker_swarm_worker_token'] }}"
   changed_when: false
   when: >
     inventory_hostname != docker_swarm_primary_manager
 
-- name: cluster | Joining Additional Docker Swarm Managers To Cluster
+- name: Joining Additional Docker Swarm Managers To Cluster
   command: >
     docker swarm join
     --listen-addr {{ docker_swarm_addr }}:{{ docker_swarm_port }}
@@ -91,7 +91,7 @@
     DOCKER_TLS_VERIFY: "1"
     DOCKER_HOST: tcp://{{ ansible_hostname }}:2376
 
-- name: cluster | Joining Docker Swarm Workers To Cluster
+- name: Joining Docker Swarm Workers To Cluster
   command: >
     docker swarm join
     --listen-addr {{ docker_swarm_addr }}:{{ docker_swarm_port }}
